@@ -9,11 +9,10 @@
 
 ## Demo
 
--   https://animedex.pages.dev
--   https://animedex-lite.netlify.app
--   https://techshreyash.github.io/AnimeDexLite
--   https://animedexlite.vercel.app
--   https://animedexlite.onrender.com
+- [https://animedex.pages.dev](https://animedex.pages.dev)
+- [https://newbienoob-0.github.io/animewebjs/](https://newbienoob-0.github.io/animewebjs/)
+- [https://poised-knowing-raisin.glitch.me/](https://poised-knowing-raisin.glitch.me/)
+- [https://animedexlite.onrender.com](https://animedexlite.onrender.com)
 
 ## Host Your Own (Free Hostings)
 
@@ -26,18 +25,3 @@
 
 -   Download this repo
 -   Open `index.html` file in browser
-
-### Host Your Own Api (Recommended)
-
--   Checkout [AnimeDexApi](https://github.com/TechShreyash/CloudflareWorker/tree/main/animedexapi)
-
-### Generate Sitemap For SEO (Automatically)
-
-1. Fork This Repo
-2. Edit `utils/sitemapgen.py` file and replace `https://animedex.pages.dev` with your domain at line 2
-3. Now your sitemap will be automatically generated and updated every week
-> You can also generate sitemap manually by running github action named `Sitemap Updater`
-
-### Join For Latest Updates
-
-[![Telegram Channel](https://img.shields.io/static/v1?label=Join&message=Telegram%20Channel&color=blueviolet&style=for-the-badge&logo=telegram&logoColor=violet)](https://telegram.me/TechZBots) [![Telegram Group](https://img.shields.io/static/v1?label=Join&message=Telegram%20Group&color=blueviolet&style=for-the-badge&logo=telegram&logoColor=violet)](https://telegram.me/TechZBots_Support)
