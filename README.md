@@ -12,7 +12,7 @@
 - [https://animedex.pages.dev](https://animedex.pages.dev)
 - [https://newbienoob-0.github.io/animewebjs/](https://newbienoob-0.github.io/animewebjs/)
 - [https://poised-knowing-raisin.glitch.me/](https://poised-knowing-raisin.glitch.me/)
-- [https://animedexlite.onrender.com](https://animedexlite.onrender.com)
+
 
 ## Host Your Own (Free Hostings)
 
