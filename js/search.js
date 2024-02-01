@@ -1,11 +1,30 @@
-const proxy = "https://proxy.techzbots1.workers.dev/?u=";
-const searchapi = "https://api.anime-dex.workers.dev/search/";
+// Api urls
+
+const ProxyApi = "https://proxy.techzbots1.workers.dev/?u="
+const searchapi = "/search/";
+
+// Api Server Manager
+
+const AvailableServers = ['https://api1.anime-dex.workers.dev', 'https://api2.anime-dex.workers.dev', 'https://api3.anime-dex.workers.dev']
+
+function getApiServer() {
+    return AvailableServers[Math.floor(Math.random() * AvailableServers.length)]
+}
 
 // Usefull functions
 
-async function getJson(url, errCount = 0) {
-    if (errCount > 5) {
-        return;
+async function getJson(path, errCount = 0) {
+    const ApiServer = getApiServer();
+    let url = ApiServer + path;
+
+    if (errCount > 2) {
+        throw `Too many errors while fetching ${url}`;
+    }
+
+    if (errCount == 1) {
+        // Retry fetch using proxy
+        console.log("Retrying fetch using proxy");
+        url = ProxyApi + url;
     }
 
     try {
@@ -45,12 +64,16 @@ let hasNextPage = true;
 
 // Search function to get anime from gogo
 async function SearchAnime(query, page = 1) {
-    const data = await getJson(proxy + searchapi + query + "?page=" + page);
+    const data = await getJson(searchapi + query + "?page=" + page);
 
     const animes = data["results"];
     const contentdiv = document.getElementById("latest2");
     const loader = document.getElementById("load");
     let html = "";
+
+    if (animes.length == 0) {
+        throw "No results found";
+    }
 
     for (let i = 0; i < animes.length; i++) {
         const anime = animes[i];
@@ -60,17 +83,14 @@ async function SearchAnime(query, page = 1) {
             anime["subOrDub"] = "SUB";
         }
 
-        html += `<a href="./anime.html?anime=${
-            anime["id"]
-        }"><div class="poster la-anime"> <div id="shadow1" class="shadow"> <div class="dubb">${anime[
-            "subOrDub"
-        ].toUpperCase()}</div></div><div id="shadow2" class="shadow"> <img class="lzy_img" src="https://cdn.jsdelivr.net/gh/TechShreyash/AnimeDex@main/static/img/loading.gif" data-src="${
-            anime["img"]
-        }"> </div><div class="la-details"> <h3>${sentenceCase(
-            anime["title"]
-        )}</h3> <div id="extra"> <span>${
-            anime["releaseDate"]
-        }</span> </div></div></div></a>`;
+        html += `<a href="./anime.html?anime=${anime["id"]
+            }"><div class="poster la-anime"> <div id="shadow1" class="shadow"> <div class="dubb">${anime[
+                "subOrDub"
+            ].toUpperCase()}</div></div><div id="shadow2" class="shadow"> <img class="lzy_img" src="./static/loading1.gif" data-src="${anime["img"]
+            }"> </div><div class="la-details"> <h3>${sentenceCase(
+                anime["title"]
+            )}</h3> <div id="extra"> <span>${anime["releaseDate"]
+            }</span> </div></div></div></a>`;
     }
     contentdiv.innerHTML += html;
 
@@ -90,12 +110,6 @@ if (query == null) {
 
 document.getElementById("latest").innerHTML = `Search Results: ${query}`;
 
-SearchAnime(query, page).then((data) => {
-    hasNextPage = data;
-    page += 1;
-    RefreshLazyLoader();
-    console.log("Search animes loaded");
-});
 
 // Load more results on scroll
 window.addEventListener("scroll", () => {
@@ -113,3 +127,21 @@ window.addEventListener("scroll", () => {
         }
     }
 });
+
+async function loadData() {
+    try {
+        const data = await SearchAnime(query, page)
+        hasNextPage = data;
+        page += 1;
+        RefreshLazyLoader();
+        console.log("Search animes loaded");
+
+    } catch (err) {
+        document.getElementById("main-section").style.display = "none";
+        document.getElementById("error-page").style.display = "block";
+        document.getElementById("error-desc").innerHTML = err;
+        console.error(err);
+    }
+}
+
+loadData();
