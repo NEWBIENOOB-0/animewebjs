@@ -35,8 +35,8 @@
 
             const defaultOptions = {
                 title: "{{ title }}",
-                controls: ['play', 'progress', 'current-time', 'duration', 'mute', 'volume', 'download', 'settings'],
-                fullscreen: { enabled: true, iosNative: false },
+                controls: ['play', 'progress', 'current-time', 'volume', 'download', 'settings', 'forward', 'rewind', 'fullscreen'],
+                fullscreen: { enabled: true, iosNative: true },
             };
 
             if (Hls.isSupported()) {
