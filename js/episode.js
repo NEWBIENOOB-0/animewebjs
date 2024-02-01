@@ -1,13 +1,32 @@
-const proxy = "https://proxy.techzbots1.workers.dev/?u=";
-const animeapi = "https://api.anime-dex.workers.dev/anime/";
-const episodeapi = "https://api.anime-dex.workers.dev/episode/";
-const dlapi = "https://api.anime-dex.workers.dev/download/";
+// Api urls
+
+const ProxyApi = "https://proxy.techzbots1.workers.dev/?u="
+const animeapi = "/anime/";
+const episodeapi = "/episode/";
+const dlapi = "/download/";
+
+// Api Server Manager
+
+const AvailableServers = ['https://api1.anime-dex.workers.dev', 'https://api2.anime-dex.workers.dev', 'https://api3.anime-dex.workers.dev']
+
+function getApiServer() {
+    return AvailableServers[Math.floor(Math.random() * AvailableServers.length)]
+}
 
 // Usefull functions
 
-async function getJson(url, errCount = 0) {
-    if (errCount > 5) {
-        return;
+async function getJson(path, errCount = 0) {
+    const ApiServer = getApiServer();
+    let url = ApiServer + path;
+
+    if (errCount > 2) {
+        throw `Too many errors while fetching ${url}`;
+    }
+
+    if (errCount == 1) {
+        // Retry fetch using proxy
+        console.log("Retrying fetch using proxy");
+        url = ProxyApi + url;
     }
 
     try {
@@ -53,7 +72,6 @@ async function loadVideo(name, stream) {
 
 // Function to available servers
 async function loadServers(servers, success = true) {
-    console.log(servers);
     const serversbtn = document.getElementById("serversbtn");
 
     html = "";
@@ -94,7 +112,7 @@ function showDownload() {
 
 // Function to get episode list
 async function getEpList(anime_id) {
-    const data = (await getJson(proxy + animeapi + anime_id))["results"];
+    const data = (await getJson(animeapi + anime_id))["results"];
     const eplist = data["episodes"];
     let ephtml = "";
 
@@ -117,26 +135,19 @@ async function getSelectorBtn(url, current, totalep) {
         html = "";
     } else {
         if (current == 1) {
-            html = `<a class="btns" href="${
-                url + (current + 1)
-            }"><button class="sbtn inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg ">Episode 2<i style="margin-left:10px; margin-right: auto;" class="fa fa-arrow-circle-right"></i></button></a>`;
+            html = `<a class="btns" href="${url + (current + 1)
+                }"><button class="sbtn inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg ">Episode 2<i style="margin-left:10px; margin-right: auto;" class="fa fa-arrow-circle-right"></i></button></a>`;
         } else if (current == totalep) {
-            html = `<a class="btns" href="${
-                url + (totalep - 1)
-            }"><button class="sbtn inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg "><i class="fa fa-arrow-circle-left"></i>Episode ${
-                totalep - 1
-            }</button></a>`;
+            html = `<a class="btns" href="${url + (totalep - 1)
+                }"><button class="sbtn inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg "><i class="fa fa-arrow-circle-left"></i>Episode ${totalep - 1
+                }</button></a>`;
         } else {
-            html = `<a class="btns" href="${
-                url + (current - 1)
-            }"><button class="sbtn inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg "><i class="fa fa-arrow-circle-left"></i>Episode ${
-                current - 1
-            }</button></a>`;
-            html += `<a class="btns" href="${
-                url + (current + 1)
-            }"><button class="sbtn inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg ">Episode ${
-                current + 1
-            }<i style="margin-left:10px; margin-right: auto;" class="fa fa-arrow-circle-right"></i></button></a>`;
+            html = `<a class="btns" href="${url + (current - 1)
+                }"><button class="sbtn inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg "><i class="fa fa-arrow-circle-left"></i>Episode ${current - 1
+                }</button></a>`;
+            html += `<a class="btns" href="${url + (current + 1)
+                }"><button class="sbtn inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg ">Episode ${current + 1
+                }<i style="margin-left:10px; margin-right: auto;" class="fa fa-arrow-circle-right"></i></button></a>`;
         }
 
         document.getElementsByClassName("selector")[0].innerHTML = html;
@@ -145,7 +156,7 @@ async function getSelectorBtn(url, current, totalep) {
 
 // Function to get download links
 async function getDownloadLinks(anime, episode) {
-    const data = (await getJson(proxy + dlapi + anime + "-episode-" + episode))[
+    const data = (await getJson(dlapi + anime + "-episode-" + episode))[
         "results"
     ];
     let html = "";
@@ -191,24 +202,34 @@ async function loadEpisodeData(data) {
     }
 }
 
-getJson(
-    proxy +
-        episodeapi +
-        urlParams.get("anime") +
-        "-episode-" +
-        urlParams.get("episode")
-).then((data) => {
-    loadEpisodeData(data).then(() => {
-        getEpList(urlParams.get("anime")).then((eplist) => {
-            console.log("Episode list loaded");
+async function loadData() {
+    try {
+        let data = await getJson(
+            episodeapi +
+            urlParams.get("anime") +
+            "-episode-" +
+            urlParams.get("episode")
+        );
 
-            getSelectorBtn(
-                "./episode.html?anime=" + urlParams.get("anime") + "&episode=",
-                urlParams.get("episode"),
-                eplist.length
-            ).then(() => {
-                console.log("Selector btn loaded");
+        loadEpisodeData(data).then(() => {
+            getEpList(urlParams.get("anime")).then((eplist) => {
+                console.log("Episode list loaded");
+
+                getSelectorBtn(
+                    "./episode.html?anime=" + urlParams.get("anime") + "&episode=",
+                    urlParams.get("episode"),
+                    eplist.length
+                ).then(() => {
+                    console.log("Selector btn loaded");
+                });
             });
         });
-    });
-});
+    } catch (err) {
+        document.getElementById("main-section").style.display = "none";
+        document.getElementById("error-page").style.display = "block";
+        document.getElementById("error-desc").innerHTML = err;
+        console.error(err);
+    }
+}
+
+loadData();
