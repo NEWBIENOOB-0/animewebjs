@@ -35,8 +35,7 @@
 
             const defaultOptions = {
                 title: "{{ title }}",
-                controls: ['play', 'progress', 'current-time', 'volume', 'download', 'settings', 'fast-forward', 'rewind', 'fullscreen'],
-                download: '.mp4',
+                controls: ['play', 'progress', 'current-time', 'volume', 'settings', 'fast-forward', 'rewind', 'fullscreen'],
                 fullscreen: { enabled: true, iosNative: true },
             };
 
@@ -46,12 +45,22 @@
                 hls.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
                     const availableQualities = hls.levels.map((l) => l.height);
                     defaultOptions.quality = { default: availableQualities[0], options: availableQualities, forced: true, onChange: (e) => updateQuality(e) };
-                    new Plyr(video, defaultOptions);
+                    const player = new Plyr(video, defaultOptions);
+
+                    // Force landscape play in Android
+                    if (/Android/.test(navigator.userAgent)) {
+                        screen.orientation.lock("landscape");
+                    }
                 });
                 hls.attachMedia(video);
                 window.hls = hls;
             } else {
-                new Plyr(video, defaultOptions);
+                const player = new Plyr(video, defaultOptions);
+
+                // Force landscape play in Android
+                if (/Android/.test(navigator.userAgent)) {
+                    screen.orientation.lock("landscape");
+                }
             }
 
             function updateQuality(newQuality) {
