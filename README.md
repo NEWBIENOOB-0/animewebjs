@@ -11,7 +11,7 @@
 
 - [https://newbienoob-0.github.io/animewebjs/](https://newbienoob-0.github.io/animewebjs/)
 - [https://poised-knowing-raisin.glitch.me/](https://poised-knowing-raisin.glitch.me/)
-- [http://grumpy-aftermath.surge.sh](http://grumpy-aftermath.surge.sh) *very slow site* 
+- [https://animewebjs-hzxdg.kinsta.page/](https://animewebjs-hzxdg.kinsta.page/)
 
 
 ## Host Your Own (Free Hostings)
