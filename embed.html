@@ -27,50 +27,48 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-BHQX4066ZV"></script>
 
     <script>
-        const params = new URLSearchParams(location.search);
-        const source = params.get("url");
+document.addEventListener("DOMContentLoaded", () => {
+    const video = document.querySelector("video");
+    const defaultOptions = {
+        title: "{{ title }}",
+        controls: ['play-large','play', 'progress', 'current-time', 'volume', 'settings', 'fast-forward', 'rewind', 'fullscreen'],
+        fullscreen: { enabled: true, iosNative: true },
+    };
 
-        document.addEventListener("DOMContentLoaded", () => {
-            const video = document.querySelector("video");
-
-            const defaultOptions = {
-                title: "{{ title }}",
-                controls: ['play-large','play', 'progress', 'current-time', 'volume', 'settings', 'fast-forward', 'rewind', 'fullscreen'],
-                fullscreen: { enabled: true, iosNative: true },
-            };
-
-            if (Hls.isSupported()) {
-                const hls = new Hls();
-                hls.loadSource(source);
-                hls.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
-                    const availableQualities = hls.levels.map((l) => l.height);
-                    defaultOptions.quality = { default: availableQualities[0], options: availableQualities, forced: true, onChange: (e) => updateQuality(e) };
-                    const player = new Plyr(video, defaultOptions);
-
-                    // Force landscape play in Android
-                    if (/Android/.test(navigator.userAgent)) {
-                        screen.orientation.lock("landscape");
-                    }
-                });
-                hls.attachMedia(video);
-                window.hls = hls;
-            } else {
-                const player = new Plyr(video, defaultOptions);
-
-                // Force landscape play in Android
-                if (/Android/.test(navigator.userAgent)) {
-                    screen.orientation.lock("landscape");
-                }
+    const initPlayer = (player) => {
+        // Keyboard controls for play/pause, seekbar forward, rewind
+        document.addEventListener('keydown', (event) => {
+            if (event.key === " ") { // Space bar
+                player.togglePlay();
+            } else if (event.key === "ArrowRight") { // Right arrow
+                player.seek(player.currentTime + 10); // Forward 10 seconds
+            } else if (event.key === "ArrowLeft") { // Left arrow
+                player.seek(player.currentTime - 10); // Rewind 10 seconds
             }
+        });
+    };
 
-            function updateQuality(newQuality) {
+    if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(source);
+        hls.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
+            const availableQualities = hls.levels.map((l) => l.height);
+            defaultOptions.quality = { default: availableQualities[0], options: availableQualities, forced: true, onChange: (e) => {
                 window.hls.levels.forEach((level, levelIndex) => {
-                    if (level.height === newQuality) {
+                    if (level.height === e) {
                         window.hls.currentLevel = levelIndex;
                     }
                 });
-            }
+            } };
+            initPlayer(new Plyr(video, defaultOptions));
         });
+        hls.attachMedia(video);
+        window.hls = hls;
+    } else {
+        initPlayer(new Plyr(video, defaultOptions));
+    }
+});
+
     </script>
 </body>
 
