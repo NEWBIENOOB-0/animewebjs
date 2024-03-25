@@ -163,13 +163,13 @@
                         forced: true,
                         onChange: (e) => updateQuality(e),
                     };
-                    const player = new Plyr(video, defaultOptions);
+                    const player = new Plyr(video, 'play-large','fullscreen','pip','defaultOptions');
                     configPlayer(player);
                 });
                 hls.attachMedia(video);
                 window.hls = hls;
             } else {
-                const player = new Plyr(video, defaultOptions);
+                const player = new Plyr(video,'play-large','fullscreen','pip','defaultOptions' );
                 configPlayer(player);
             }
 
