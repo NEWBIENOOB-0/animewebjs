@@ -1,34 +1,38 @@
 // Api urls
 
-const ProxyApi = "https://proxy.techzbots1.workers.dev/?u="
+const ProxyApi = "https://proxy.techzbots1.workers.dev/?u=";
 const IndexApi = "/home";
 const recentapi = "/recent/";
 
 // Api Server Manager
 
 const AvailableServers = ["https://api69.anime-dex.workers.dev"];
+
 function getApiServer() {
-    return AvailableServers[Math.floor(Math.random() * AvailableServers.length)]
+    return AvailableServers[Math.floor(Math.random() * AvailableServers.length)];
 }
 
 // Usefull functions
 
 async function getJson(path, errCount = 0) {
     const ApiServer = getApiServer();
+
     let url = ApiServer + path;
 
     if (errCount > 2) {
-        return;
+        throw `Too many errors while fetching ${url}`;
     }
 
-    if (errCount == 1) {
+    if (errCount > 0) {
         // Retry fetch using proxy
         console.log("Retrying fetch using proxy");
         url = ProxyApi + url;
     }
 
     try {
-        const response = await fetch(url);
+        const _url_of_site = new URL(window.location.href);
+        const referer = _url_of_site.origin;
+        const response = await fetch(url, { headers: { referer: referer } });
         return await response.json();
     } catch (errors) {
         console.error(errors);
@@ -71,7 +75,7 @@ async function getTrendingAnimes(data) {
         let status = anime["status"];
         let genres = genresToString(anime["genres"]);
         let description = anime["description"];
-        let url = "./anime.html?anime=" + encodeURIComponent(title);
+        let url = "./anime.html?anime_id=" + encodeURIComponent(title);
 
         let poster = anime["bannerImage"];
         if (poster == null) {
@@ -95,7 +99,7 @@ async function getPopularAnimes(data) {
         let anime = data[pos];
         let title = anime["title"];
         let id = anime["id"];
-        let url = "./anime.html?anime=" + id;
+        let url = "./anime.html?anime_id=" + id;
         let image = anime["image"];
         let subOrDub;
         if (title.toLowerCase().includes("dub")) {
@@ -119,7 +123,7 @@ async function getRecentAnimes(page = 1) {
         let anime = data[pos];
         let title = anime["title"];
         let id = anime["id"].split("-episode-")[0];
-        let url = "./anime.html?anime=" + id;
+        let url = "./anime.html?anime_id=" + id;
         let image = anime["image"];
         let ep = anime["episode"].split(" ")[1];
         let subOrDub;
@@ -202,33 +206,33 @@ function sleep(ms) {
 
 // To load more animes when scrolled to bottom
 let page = 2;
-let isLoading = 0;
-let errCount = 0;
-function loadAnimes() {
+let isLoading = false;
+
+async function loadAnimes() {
     try {
-        if (isLoading == 0) {
-            isLoading = 1;
-            getRecentAnimes(page).then((data) => {
-                RefreshLazyLoader();
-                console.log("Recent animes loaded");
-            });
+        if (isLoading == false) {
+            isLoading = true;
+            await getRecentAnimes(page);
+            RefreshLazyLoader();
+            console.log("Recent animes loaded");
             page += 1;
-            isLoading = 0;
-            errCount = 0;
+            isLoading = false;
         }
     } catch (error) {
-        isLoading = 0;
-        errCount += 1;
-        if (errCount < 5) {
-            setTimeout(loadAnimes(), 2000);
-        }
+        isLoading = false;
+        console.error(`Failed To Load Recent Animes Page : ${page}`);
+        page += 1;
     }
 }
 
-window.addEventListener("scroll", () => {
-    if (
-        window.scrollY + window.innerHeight >= document.documentElement.scrollHeight
-    ) {
+// Add a scroll event listener
+window.addEventListener("scroll", function () {
+    // Calculate how far the user has scrolled
+    const scrollPosition = window.scrollY;
+    const windowHeight = window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
+
+    if (scrollPosition + 3 * windowHeight >= documentHeight) {
         loadAnimes();
     }
 });
