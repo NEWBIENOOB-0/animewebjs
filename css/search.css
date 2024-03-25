@@ -15,6 +15,8 @@ body {
     max-width: 100%;
     overflow-x: hidden;
     background-color: #282828;
+    scroll-behavior: smooth;
+    user-select: none;
 }
 
 header {
@@ -58,7 +60,6 @@ footer a {
     background: linear-gradient(to right, #eb3349 40%, #f45c43);
     width: 100%;
     text-align: center;
-    padding-top: 25px;
     height: 86px;
     margin: auto;
     font-family: "Roboto", sans-serif;
@@ -347,7 +348,6 @@ h2 {
 }
 
 #head-div {
-    padding-top: 25px;
     width: 100%;
 }
 
@@ -424,7 +424,6 @@ h2 {
     }
 
     #head-div {
-        padding-top: 25px;
         width: 100%;
     }
 
@@ -642,4 +641,22 @@ h2 {
 .container a {
     color: #721c24;
     text-decoration: underline;
+}
+
+#title1 {
+    width: 70%;
+    height: 86px
+}
+
+#title1 a {
+    height: 86px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media screen and (max-width: 520px) {
+    #title1 img {
+        height: 55px;
+    }
 }

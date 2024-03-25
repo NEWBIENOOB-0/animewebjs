@@ -14,7 +14,9 @@ body {
     width: 100%;
     max-width: 100%;
     overflow-x: hidden;
-    background-color: #282828;
+    background-color: #131314;
+    scroll-behavior: smooth;
+    user-select: none;
 }
 
 header {
@@ -58,7 +60,6 @@ footer a {
     background: linear-gradient(to right, #eb3349 40%, #f45c43);
     width: 100%;
     text-align: center;
-    padding-top: 25px;
     height: 86px;
     margin: auto;
     font-family: "Roboto", sans-serif;
@@ -581,6 +582,8 @@ h2 {
     margin: 0px 2px;
     margin-bottom: 10px;
     display: inline-block;
+    width: 70px;
+    text-align: center;
 }
 
 .la-anime {
@@ -1009,8 +1012,9 @@ h2 {
     font-family: 'Roboto';
 }
 
-.container h1 {
+.container h6 {
     color: #721c24;
+    font-size: x-large;
 }
 
 .container p {
@@ -1021,4 +1025,173 @@ h2 {
 .container a {
     color: #721c24;
     text-decoration: underline;
+}
+
+.ep-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: all 0.5s;
+    border: none;
+}
+
+
+.ep-title {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: left;
+    position: relative;
+    bottom: 33px;
+    color: rgba(237, 241, 245, .91);
+    background-color: rgba(31, 38, 49, 0.7);
+    padding: 5px 10px;
+    font-family: "Montserrat", sans-serif
+}
+
+.ep-slide {
+    height: 100px;
+    width: 175px;
+    margin: 0 10px;
+    display: block;
+    border-radius: 5px;
+    border: 2px solid #ffffff;
+    overflow: hidden;
+}
+
+.ep-slider {
+    height: 100px;
+    width: max-content;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.slider-carousel {
+    overflow-x: auto;
+    width: 100%;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    scroll-behavior: smooth;
+    user-select: none;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px
+}
+
+.prev,
+.next {
+    z-index: 5;
+}
+
+
+.prev,
+.next {
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    width: auto;
+    padding: 16px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+.prev:hover,
+.next:hover {
+    background-color: rgba(0, 0, 0, 1);
+}
+
+.slider-main {
+    position: relative;
+}
+
+
+.ep-divo-upper {
+    border: none;
+    background-color: orange;
+    margin: 5px 10px 10px 10px;
+    padding: 10px 15px;
+}
+
+.ep-divo-upper option {
+    width: 120px;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.ep-divo-lower {
+    max-height: 320px;
+    overflow-y: auto;
+    background-color: unset;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    place-items: center;
+    grid-gap: 10px;
+    transition: all 0.5s linear;
+}
+
+.ep-divo-outer {
+    background-color: #27272c;
+    width: 90%;
+    max-width: 770px;
+    margin: 20px auto;
+    border-radius: 5px;
+    padding-top: 5px;
+}
+
+.ep-divo-outer section {
+    display: flex;
+    flex-direction: row;
+}
+
+.ep-btn {
+    background-color: #454444;
+    color: white;
+    display: block;
+}
+
+.ep-divo-outer h2 {
+    color: white;
+    margin-left: 15px;
+}
+
+.ep-btn:hover {
+    background-color: #eb001f;
+}
+
+#title1 {
+    width: 70%;
+    height: 86px
+}
+
+#title1 a {
+    height: 86px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media screen and (max-width: 520px) {
+    #title1 img {
+        height: 55px;
+    }
 }
