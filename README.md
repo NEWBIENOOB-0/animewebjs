@@ -18,8 +18,18 @@
 
 -   Cloudflare, Netlify, Github Pages, Vercel, Render
 -   And Many More (Search On Google - Free Static Website Hosting)
-
+-   
 > You can easily host on any free hosting
+## Host Your AWS or cloud(Ubuntu)
+```bash
+git clone https://github.com/NEWBIENOOB-0/animewebjs.git
+cd animewebjs
+sudo mv * /var/www/html
+sudo systemctl start apache2
+sudo systemctl enable apache2
+```
+
+
 
 ## Run On Your Pc
 
