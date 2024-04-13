@@ -1,0 +1,16 @@
+User-agent: SemrushBot
+User-agent: SiteAuditBot
+User-agent: SemrushBot-BA
+User-agent: SemrushBot-SI
+User-agent: SemrushBot-SWA
+User-agent: SemrushBot-CT
+User-agent: SplitSignalBot
+User-agent: SemrushBot-COUB
+Disallow: /
+
+User-agent: *
+Allow: /
+Disallow: /embed.html
+Disallow: /embed
+
+Sitemap: https://animedex.pages.dev/recent_sitemap.xml
