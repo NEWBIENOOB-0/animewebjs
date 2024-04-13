@@ -8,7 +8,6 @@
 -   Powered By Blazing Fast [AnimeDexApi](https://api.anime-dex.workers.dev)
 
 ## Demo
-- https://animewebjs.firebaseapp.com/
 - [https://newbienoob-0.github.io/animewebjs/](https://newbienoob-0.github.io/animewebjs/)
 - [https://poised-knowing-raisin.glitch.me/](https://poised-knowing-raisin.glitch.me/)
 - [https://animewebjs-hzxdg.kinsta.page/](https://animewebjs-hzxdg.kinsta.page/)
